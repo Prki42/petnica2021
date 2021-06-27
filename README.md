@@ -20,7 +20,7 @@ Pokretanje jupyter lab-a:
 ```bash
 pipenv run jupyter lab
 ```
-Konzola unutar virtualnog okruzenja:
+Konzola unutar virtuelnog okruženja:
 ```bash
 pipenv shell
 ```
