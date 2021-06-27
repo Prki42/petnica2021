@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+jupyterlab = "*"
+numpy = "*"
+nb-black = "*"
+jupytext = "*"
+
+[dev-packages]
+flake8 = "==3.9.2"
+black = "==21.6b0"
+pre-commit = "*"
+
+[requires]
+python_version = "3.9"

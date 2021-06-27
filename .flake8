@@ -1,0 +1,11 @@
+[flake8]
+# E741: koriscenje l, I, O kao imena promenjivih
+# E203: razmak nakon :
+# W503: razdvajanje pre binarnog operatora u novi red
+# E402: importi koji nisu na pocetku koda
+ignore = E741, E203, W503, E402
+exclude = 
+    .git,
+    .vscode,
+    .ipynb_checkpoints,
+    __pycache

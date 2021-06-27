@@ -1,0 +1,11 @@
+[tool.black]
+# flake8 default vrednost za duzinu linije
+line-length = 79
+exclude = '''
+/(
+    \.git
+  | \.ipynb_checkpoints
+  | \__pycache__
+  | \.vscode
+)/
+'''
