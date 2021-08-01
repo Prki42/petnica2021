@@ -36,9 +36,35 @@ class TPM:
             l,
         )
 
+    def anti_hebbian_learning(self, tau_b: int, X: np.ndarray) -> None:
+        if self.tau != tau_b:
+            return
+        k, _, l = self.get_properties()
+        self.W = vg(
+            self.W
+            - (self.sigma * X.T).T
+            * vtheta(self.sigma, self.tau).reshape(k, 1),
+            l,
+        )
+
+    def random_walk(self, tau_b: int, X: np.ndarray) -> None:
+        if self.tau != tau_b:
+            return
+        k, _, l = self.get_properties()
+        self.W = vg(
+            self.W
+            + (self.sigma * X.T).T
+            * vtheta(self.sigma, self.tau).reshape(k, 1),
+            l,
+        )
+
 
 def synchronize(
-    a: TPM, b: TPM, learning: str = "hebbian", maxIters: int = 1000
+    a: TPM,
+    b: TPM,
+    learning: str = "hebbian",
+    maxIters: int = 1000,
+    return_weights: bool = False,
 ) -> np.ndarray:
     progress = np.zeros(shape=(maxIters), dtype=float)
     num = 0
@@ -51,10 +77,18 @@ def synchronize(
         X = np.random.choice([-1, 1], size=(k, n))
         tauA = a(X)
         tauB = b(X)
-        if learning == "hebbian":
+        if learning == "anti_hebbian":
+            a.anti_hebbian_learning(tauB, X)
+            b.anti_hebbian_learning(tauA, X)
+        elif learning == "random_walk":
+            a.random_walk(tauB, X)
+            b.random_walk(tauA, X)
+        else:
             a.hebbian_learning(tauB, X)
             b.hebbian_learning(tauA, X)
     progress = progress[0 : num + 1]
+    if return_weights:
+        return a.W
     return progress
 
 

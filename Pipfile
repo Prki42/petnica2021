@@ -8,6 +8,8 @@ jupyterlab = "*"
 numpy = "*"
 nb-black = "*"
 jupytext = "*"
+matplotlib = "*"
+seaborn = "*"
 
 [dev-packages]
 flake8 = "==3.9.2"

@@ -28,8 +28,6 @@ pipenv shell
 ## Uputstva
 `.py` fajlovi untar `notebooks/` foldera se ne eidtuju već se koriste kao format za verzionisanje pomoću kog se rekonstruiše `.ipynb` fajl koristeći `jupytext` ekstenziju. [Detaljnije](https://jupytext.readthedocs.io/en/latest/examples.html#collaborating-on-jupyter-notebooks)
 
-Za pokretanje `.py` verzije jupyter sveske potrebno je cd-ovati u direktorijum u kome se nalazi zbog razrešavanja putanja lokalnih modula.
-
 `pre-commit hook` pre svakog commit-a ceo codebase formatira pa lintuje i ako fail-uje u nekom koraku prekida commit.
 
 

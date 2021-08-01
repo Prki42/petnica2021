@@ -24,3 +24,15 @@ def g(x: int, l: int) -> int:
 
 
 vg = np.vectorize(g)
+
+
+def relu(x: int) -> float:
+    if x > 0:
+        return x
+    return 0
+
+
+def relu_derivative(x: int) -> float:
+    if x > 0:
+        return 1
+    return 0

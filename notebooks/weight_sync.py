@@ -13,21 +13,13 @@
 #     name: python3
 # ---
 
-# + [markdown] tags=[]
-# # Test
-# -
-
-# Formatiranje koda
-
-# %load_ext lab_black
+# # Synch weights histogram
 
 # +
+# %load_ext lab_black
 import matplotlib.pyplot as plt
 
 # %matplotlib inline
-# -
-
-# Dodavanje putanje za lokalne module
 
 # +
 import os
@@ -43,55 +35,50 @@ except KeyError:
 module_path = os.path.abspath(module_path)
 if module_path not in sys.path:
     sys.path.append(module_path)
-# -
-
-# ## Distribucija broja iteracija do sinhronizacije
 
 # +
 from neuralcrypto.models.tpm import TPM
 from neuralcrypto.models.tpm import synchronize
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 import numpy as np
-import time
 
 k = 3
 n = 101
 l = 3
-
-it = 1000
 learning_rule = "hebbian"
 
-start_time = time.perf_counter()
-p = Pool(4)
-results = p.starmap(
+it_count = 1000
+
+p = Pool(cpu_count())
+weights = p.starmap(
     synchronize,
     iter(
-        [(TPM(k, n, l), TPM(k, n, l), learning_rule, 5000) for _ in range(it)]
+        [
+            (TPM(k, n, l), TPM(k, n, l), learning_rule, 5000, True)
+            for _ in range(it_count)
+        ]
     ),
 )
-elapsed = time.perf_counter() - start_time
 
-print(f"Vreme: {elapsed:.3f}s")
-
-s = np.array([x.shape[0] for x in results])
-
-plt.hist(
-    s,
-    color="blue",
-    edgecolor="black",
-    bins=30,
-)
-plt.xlabel("Brot iteracija")
-plt.title(f"K={k}, N={n}, L={l}; {learning_rule}")
-plt.show()
+histograms = [np.histogram(w, 2 * l + 1)[0] for w in weights]
+average_hist = np.sum(histograms, axis=0) / (it_count * k * n) * 100
 # -
 
-worst_index = np.argmax(s)
-print(np.max(s))
-print(worst_index)
-progress = results[worst_index]
-plt.plot(list(range(1, len(progress) + 1)), progress)
-plt.xlabel("iteracija")
-plt.ylabel("% sinhronizacije")
-plt.title("Najsporija sinhronizacija")
+plt.bar(np.arange(-k, k + 1), average_hist, color="blue")
+plt.title(f"Prosecna distribucija vrednosti tezista\nK={k}, N={n}, L={l}")
+plt.ylabel("Ucestalost (%)")
+plt.show()
+
+# +
+from random import randint
+
+plt.bar(
+    np.arange(-k, k + 1),
+    histograms[randint(0, it_count - 1)] / (k * n) * 100,
+    color="blue",
+)
+plt.title(
+    f"Distribucija vrednosti tezistia u random slucaju\nK={k}, N={n}, L={l}"
+)
+plt.ylabel("Ucestalost (%)")
 plt.show()
