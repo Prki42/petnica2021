@@ -55,10 +55,10 @@ import numpy as np
 import time
 
 k = 3
-n = 101
-l = 3
+n = 1001
+l = 5
 
-it = 1000
+it = 100
 learning_rule = "hebbian"
 
 start_time = time.perf_counter()
@@ -66,14 +66,15 @@ p = Pool(4)
 results = p.starmap(
     synchronize,
     iter(
-        [(TPM(k, n, l), TPM(k, n, l), learning_rule, 5000) for _ in range(it)]
+        [(TPM(k, n, l), TPM(k, n, l), learning_rule, 10000) for _ in range(it)]
     ),
 )
 elapsed = time.perf_counter() - start_time
 
 print(f"Vreme: {elapsed:.3f}s")
 
-s = np.array([x.shape[0] for x in results])
+# +
+s = np.array([x["X"].shape[0] for x in results])
 
 plt.hist(
     s,
@@ -89,7 +90,7 @@ plt.show()
 worst_index = np.argmax(s)
 print(np.max(s))
 print(worst_index)
-progress = results[worst_index]
+progress = results[worst_index]["progress"]
 plt.plot(list(range(1, len(progress) + 1)), progress)
 plt.xlabel("iteracija")
 plt.ylabel("% sinhronizacije")

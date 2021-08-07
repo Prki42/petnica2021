@@ -35,7 +35,10 @@ import matplotlib.pyplot as plt
 
 # %matplotlib inline
 # %load_ext lab_black
+# -
 
+
+# ## Naive approach
 
 # +
 import numpy as np
